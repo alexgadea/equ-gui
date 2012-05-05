@@ -15,8 +15,8 @@ Bug-reports:         https://github.com/miguelpagano/equ/issues
 
 Source-repository this
     Type:     git
-    Location: http://github.com/miguelpagano/equ
-    Branch:   gui
+    Location: https://github.com/alexgadea/equ-gui
+    Branch:   master
 
 Executable equ-gui
     buildable: True
