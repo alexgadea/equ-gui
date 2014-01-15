@@ -44,7 +44,7 @@ main = do
     initGUI
 
     -- TODO: qué pasa si no existe el archivo.
-    Just xml <- xmlNew "GUI/equ.glade"
+    Just xml <- xmlNew "/usr/share/equ/equ.glade"
 
     -- get widgets
     window        <- xmlGetWidget xml castToWindow "mainWindow"

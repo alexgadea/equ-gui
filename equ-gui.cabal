@@ -18,7 +18,7 @@ Source-repository this
     Location: https://github.com/alexgadea/equ-gui
     Branch:   master
 
-Executable equ-gui
+Executable equ
     buildable: True
     HS-Source-Dirs: .
     Main-is: GUI/Gui.hs
