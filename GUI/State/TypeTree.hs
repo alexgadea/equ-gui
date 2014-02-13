@@ -19,7 +19,7 @@ import Equ.Expr
 import Equ.PreExpr hiding(goUp,goRight,goLeft,goDown,goDownL)
 import Equ.Theories
 import Equ.Syntax
-import Equ.Parser
+import Equ.Parser hiding (getExprState)
 import Equ.Exercise
 import Equ.Rule
 import Equ.Types
@@ -62,26 +62,26 @@ searchFocusInTree f = getTreeExpr >>= \(Just tExpr) ->
                     (_,ses) -> return $ ses
 
 updateTypeQuantInExprTree :: ExprState -> Type -> IState ()
-updateTypeQuantInExprTree es t = 
+updateTypeQuantInExprTree es t =
                         getTreeExpr >>= \(Just tExpr) ->
                         getQuantExprTree >>= \qETree ->
                         update (\gst -> gst {gTreeExpr = Just $
-                                                tExpr {quantExpr = qETree' qETree} 
+                                                tExpr {quantExpr = qETree' qETree}
                                             })
     where qETree' :: [ExprState] -> [ExprState]
-          qETree' les = map (\te -> if (eventType te) == (eventType es) 
+          qETree' les = map (\te -> if (eventType te) == (eventType es)
                                         then te {fType = t}
                                         else te ) les
 
 updateTypeAtomInExprTree :: ExprState -> Type -> IState ()
-updateTypeAtomInExprTree es t = 
+updateTypeAtomInExprTree es t =
                         getTreeExpr >>= \(Just tExpr) ->
                         getAtomExprTree >>= \aETree ->
                         update (\gst -> gst {gTreeExpr = Just $
-                                                tExpr {atomExpr = aETree' aETree} 
+                                                tExpr {atomExpr = aETree' aETree}
                                             })
     where aETree' :: [ExprState] -> [ExprState]
-          aETree' les = map (\te -> if (eventType te) == (eventType es) 
+          aETree' les = map (\te -> if (eventType te) == (eventType es)
                                         then te {fType = t}
                                         else te ) les
 
@@ -89,28 +89,27 @@ updateTypeAtomInExprTree es t =
 -- tipado, en base a una lista de focus y moves.
 updateTypeOpInMainExprTree :: [(Focus, Move)] -> Type -> IState ()
 updateTypeOpInMainExprTree fs t = getMainExprTree >>= \exprT ->
-                                  updateMainExprTree exprT {fExpr = (setType fs t (fExpr exprT))}
+                                  updateMainExprTree exprT {fExpr = (setTypeFocus fs t (fExpr exprT))}
 
 updateTypeQuantInMainExprTree :: ExprState -> Type -> IState ()
 updateTypeQuantInMainExprTree es qt = getMainExprTree >>= \exprT ->
-                                      updateMainExprTree exprT 
-                                                {fExpr = setQuantType 
+                                      updateMainExprTree exprT
+                                                {fExpr = setQuantType
                                                             (fExpr exprT) id
                                                             qt}
 
 updateTypeVarQInMainExprTree :: ExprState -> Type -> IState ()
 updateTypeVarQInMainExprTree es qt = getMainExprTree >>= \exprT ->
-                                      updateMainExprTree exprT 
-                                                {fExpr = setVarQType 
+                                      updateMainExprTree exprT
+                                                {fExpr = setVarQType
                                                             (fExpr exprT) id
                                                             qt}
-
 
 -- | Actualiza el tipo de un atomo en la expresión principal del árbol de
 -- tipado, en base a un exprState.
 updateTypeAtomInMainExprTree :: ExprState -> Type -> IState ()
 updateTypeAtomInMainExprTree es t = getMainExprTree >>= \exprT ->
-                                    updateMainExprTree exprT 
+                                    updateMainExprTree exprT
                                                 {fExpr = setAtomType (fExpr exprT) id t}
 
 updateExprSelectExpr :: ExprState -> PreExpr -> IState ()
@@ -134,29 +133,29 @@ updateMainExprTree es = updateMTT $ return . tExpr
 updateOpExprTree :: [[(Focus, Move)]] -> (Maybe [(Focus,Move)]) -> (Maybe Type) -> IState ()
 updateOpExprTree fss Nothing Nothing = updateMTT $ return . tExpr
     where tExpr :: (Maybe TreeExpr) -> TreeExpr
-          tExpr (Just te) = TreeExpr (mainExpr te) 
-                                     fss 
+          tExpr (Just te) = TreeExpr (mainExpr te)
+                                     fss
                                      (atomExpr te)
                                      (quantExpr te)
 updateOpExprTree fss (Just fs) (Just t) = (update (\gst -> gst {gTreeExpr = Just $ tExpr (gTreeExpr gst)}))
-    where 
+    where
           fss' = deleteBy (\fs' -> \fs -> ((fst . unzip) fs') == ((fst . unzip) fs)) fs fss
           tExpr :: (Maybe TreeExpr) -> TreeExpr
-          tExpr (Just te) = TreeExpr (mainExpr te) 
-                                     fss 
+          tExpr (Just te) = TreeExpr (mainExpr te)
+                                     fss
                                      (atomExpr te)
                                      (quantExpr te)
 
 -- | Limpia el árbol de tipado del estado general.
 cleanTreeExpr :: IState ()
-cleanTreeExpr = updateMTT (const Nothing) >> 
-                getExprState >>= \(Just es) -> 
+cleanTreeExpr = updateMTT (const Nothing) >>
+                getExprState >>= \(Just es) ->
                 updateTypeSelectType es TyUnknown
 
 
--- | 
+-- |
 updateTT :: (TreeExpr -> TreeExpr) -> IState ()
-updateTT f = askRef >>= \gst -> 
+updateTT f = askRef >>= \gst ->
              case gTreeExpr gst of
                Just gte -> update $ \gst -> gst { gTreeExpr = return $ f gte }
                _ -> return ()
@@ -183,7 +182,7 @@ addQuantExprTree es =  getQuantExprTree >>= \l ->
                        updateTT $ \gte -> gte {quantExpr = es:l}
 
 getMainExprTree :: IState ExprState
-getMainExprTree = getStatePartDbg "getMainExprTree" 
+getMainExprTree = getStatePartDbg "getMainExprTree"
                                             (mainExpr . fromJust . gTreeExpr)
 
 getOpExprTree :: IState [[(Focus, Move)]]
@@ -194,4 +193,5 @@ getAtomExprTree = askRef >>= return . atomExpr . fromJust . gTreeExpr
 
 getQuantExprTree :: IState [ExprState]
 getQuantExprTree = askRef >>= return . quantExpr . fromJust . gTreeExpr
+
 

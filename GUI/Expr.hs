@@ -24,7 +24,7 @@ import qualified Equ.PreExpr as PE
 import Equ.PreExpr.Eval
 import qualified Equ.PreExpr.Show as PS
 import Equ.Syntax
-import Equ.Parser
+import Equ.Parser hiding (getExprState, getProofState)
 import Equ.TypeChecker(checkPreExpr)
 import Equ.Types
 
@@ -256,11 +256,11 @@ frameExp' f@(e@(Con c),_) emask vmask wes =
                         setupFormEv box lblConst e emask >> 
                         return (appendWExprList (WExpr Nothing (ctw box) f) wes)
 
-frameExp' f@(e@(Fun fun),_) emask vmask wes = 
-                        lift newBox >>= \box ->
-                        (lift . labelStr . repr) fun >>= \lblConst ->
-                        setupFormEv box lblConst e emask >> 
-                        return (appendWExprList (WExpr Nothing (ctw box) f) wes)
+-- frameExp' f@(e@(Fun fun),_) emask vmask wes = 
+--                         lift newBox >>= \box ->
+--                         (lift . labelStr . repr) fun >>= \lblConst ->
+--                         setupFormEv box lblConst e emask >> 
+--                         return (appendWExprList (WExpr Nothing (ctw box) f) wes)
 
 frameExp' f@(e@(UnOp op e'),p) emask vmask wes =                
         let f1' = goDown f in
@@ -384,7 +384,7 @@ frameExp' f@(e@(Quant q v e1 e2),_) emask vmask wes =
                          io (set entry [ entryEditable := True ]) >>
                          withState (onEntryActivate entry) 
                            (io (entryGetText entry) >>=
-                                   return . parserVar >>=
+                                   return . parserVar UnusedParen >>=
                                    either (reportErrWithErrPaned . show) 
                                            (\v -> replaceEntry box v p >>
                                                  updateQVar v p >>

@@ -26,7 +26,7 @@ import Equ.Theories (theories)
 import qualified Graphics.UI.Gtk as G
 import Graphics.UI.Gtk hiding (eventButton, eventSent,get)
 import Graphics.UI.Gtk.Gdk.Events 
-import Graphics.UI.Gtk.Glade
+-- import Graphics.UI.Gtk.Glade
 import Data.Text (pack,unpack)
 
 import Data.Reference
@@ -42,71 +42,70 @@ import Data.Map (fromList)
 main :: IO ()
 main = do 
     initGUI
-
-    -- TODO: qué pasa si no existe el archivo.
-    Just xml <- xmlNew "GUI/equ.glade"
+    xml <- builderNew
+    builderAddFromFile xml "GUI/equ.ui"
 
     -- get widgets
-    window        <- xmlGetWidget xml castToWindow "mainWindow"
+    window        <- builderGetObject xml castToWindow "mainWindow"
     quitButton    <- getMenuButton xml "QuitButton"
 
-    statusBar     <- xmlGetWidget xml castToStatusbar "statusBar"
+    statusBar     <- builderGetObject xml castToStatusbar "statusBar"
     ctxExpr       <- statusbarGetContextId statusBar "Expr"
-    symbolList    <- xmlGetWidget xml castToIconView "symbolList"
-    axiomList     <- xmlGetWidget xml castToTreeView "axiomList"
+    symbolList    <- builderGetObject xml castToIconView "symbolList"
+    axiomList     <- builderGetObject xml castToTreeView "axiomList"
     
-    symFrame <- xmlGetWidget xml castToFrame "symFrame"
-    axiomFrame <- xmlGetWidget xml castToFrame "axiomFrame"
-    errPane <- xmlGetWidget xml castToPaned "errPane"
+    symFrame <- builderGetObject xml castToFrame "symFrame"
+    axiomFrame <- builderGetObject xml castToFrame "axiomFrame"
+    errPane <- builderGetObject xml castToPaned "errPane"
 
-    centralBox <- xmlGetWidget xml castToVBox "centralBox"
+    centralBox <- builderGetObject xml castToVBox "centralBox"
 
 
-    itemNewProof <- xmlGetWidget xml castToImageMenuItem "itemNewProof"
-    itemLoadProof <- xmlGetWidget xml castToImageMenuItem "itemLoadProof"
-    itemSaveProof <- xmlGetWidget xml castToImageMenuItem "itemSaveProof"
-    itemDiscardProof <- xmlGetWidget xml castToImageMenuItem "itemDiscardProof"
-    itemSaveAsTheorem <- xmlGetWidget xml castToImageMenuItem "itemSaveAsTheorem"
+    itemNewProof <- builderGetObject xml castToImageMenuItem "itemNewProof"
+    itemLoadProof <- builderGetObject xml castToImageMenuItem "itemLoadProof"
+    itemSaveProof <- builderGetObject xml castToImageMenuItem "itemSaveProof"
+    itemDiscardProof <- builderGetObject xml castToImageMenuItem "itemDiscardProof"
+    itemSaveAsTheorem <- builderGetObject xml castToImageMenuItem "itemSaveAsTheorem"
     
-    itemUndo <- xmlGetWidget xml castToImageMenuItem "undoMenuItem"
-    itemRedo <- xmlGetWidget xml castToImageMenuItem "redoMenuItem"
+    itemUndo <- builderGetObject xml castToImageMenuItem "undoMenuItem"
+    itemRedo <- builderGetObject xml castToImageMenuItem "redoMenuItem"
     
-    exerciseEditToolBarBox <- xmlGetWidget xml castToToolbar "exerciseEditToolBarBox"
-    exerciseToolBarBox <- xmlGetWidget xml castToToolbar "exerciseToolBarBox"
+    exerciseEditToolBarBox <- builderGetObject xml castToToolbar "exerciseEditToolBarBox"
+    exerciseToolBarBox <- builderGetObject xml castToToolbar "exerciseToolBarBox"
     
-    itemMakeExercise <- xmlGetWidget xml castToImageMenuItem "itemMakeExercise"
-    itemSaveExercise <- xmlGetWidget xml castToImageMenuItem "itemSaveExercise"
-    itemLoadForEditExercise <- xmlGetWidget xml castToImageMenuItem "itemLoadForEditExercise"
+    itemMakeExercise <- builderGetObject xml castToImageMenuItem "itemMakeExercise"
+    itemSaveExercise <- builderGetObject xml castToImageMenuItem "itemSaveExercise"
+    itemLoadForEditExercise <- builderGetObject xml castToImageMenuItem "itemLoadForEditExercise"
     
-    itemSaveProofExercise <- xmlGetWidget xml castToImageMenuItem "itemSaveProofExercise"
-    itemLoadExercise <- xmlGetWidget xml castToImageMenuItem "itemLoadExercise"
+    itemSaveProofExercise <- builderGetObject xml castToImageMenuItem "itemSaveProofExercise"
+    itemLoadExercise <- builderGetObject xml castToImageMenuItem "itemLoadExercise"
     
     -- toolbuttons
-    newProofTool <- xmlGetWidget xml castToToolButton "newProof"
-    discardProofTool <- xmlGetWidget xml castToToolButton "discardProof"
-    saveTheoremTool <- xmlGetWidget xml castToToolButton "saveTheoremTool"
-    saveHypothesisTool <- xmlGetWidget xml castToToolButton "saveHypothesisTool"
+    newProofTool <- builderGetObject xml castToToolButton "newProof"
+    discardProofTool <- builderGetObject xml castToToolButton "discardProof"
+    saveTheoremTool <- builderGetObject xml castToToolButton "saveTheoremTool"
+    saveHypothesisTool <- builderGetObject xml castToToolButton "saveHypothesisTool"
 
-    unDo <- xmlGetWidget xml castToToolButton "undoTool"
-    reDo <- xmlGetWidget xml castToToolButton "redoTool"
+    unDo <- builderGetObject xml castToToolButton "undoTool"
+    reDo <- builderGetObject xml castToToolButton "redoTool"
     
-    fieldProofFaceBox <- xmlGetWidget xml castToHBox "fieldProofFaceBox"
+    fieldProofFaceBox <- builderGetObject xml castToHBox "fieldProofFaceBox"
     
-    proofFaceBox <- xmlGetWidget xml castToHBox "proofFaceBox"
+    proofFaceBox <- builderGetObject xml castToHBox "proofFaceBox"
             
     -- Expresión inicial
-    initExprBox <- xmlGetWidget xml castToHBox "initExprBox"
+    initExprBox <- builderGetObject xml castToHBox "initExprBox"
     
     -- Validar Prueba
-    validTool <- xmlGetWidget xml castToToolButton "validateTool"
-    itemValidateProof <- xmlGetWidget xml castToImageMenuItem "itemValidateProof"
-    boxValidIcon <- xmlGetWidget xml castToHBox "boxValidIcon"
+    validTool <- builderGetObject xml castToToolButton "validateTool"
+    itemValidateProof <- builderGetObject xml castToImageMenuItem "itemValidateProof"
+    boxValidIcon <- builderGetObject xml castToHBox "boxValidIcon"
     imageValidProof <- imageNewFromStock iconUnknownProof IconSizeSmallToolbar
     boxPackStart boxValidIcon  imageValidProof PackNatural 2
     
-    symGoLeftBox <- xmlGetWidget xml castToHBox "symGoLeftBox"
-    symGoRightBox <- xmlGetWidget xml castToHBox "symGoRightBox"
-    swSymbolList <- xmlGetWidget xml castToScrolledWindow "swSymbolList"
+    symGoLeftBox <- builderGetObject xml castToHBox "symGoLeftBox"
+    symGoRightBox <- builderGetObject xml castToHBox "symGoRightBox"
+    swSymbolList <- builderGetObject xml castToScrolledWindow "swSymbolList"
     
     truthBox <- io $ vBoxNew False 2
 
@@ -194,6 +193,6 @@ setActionMenuTool item tool act ref = onToolButtonClicked tool action >>
 -- | Funcion que dado el nombre de un control que está en el menu y en la barra
 -- configura la misma acción para ambos.
 getAndSetAction xml name action ref = do
-  item <- xmlGetWidget xml castToImageMenuItem $ name ++ "Item"
-  tool <- xmlGetWidget xml castToToolButton $ name ++ "Tool"
+  item <- builderGetObject xml castToImageMenuItem $ name ++ "Item"
+  tool <- builderGetObject xml castToToolButton $ name ++ "Tool"
   setActionMenuTool item tool action ref

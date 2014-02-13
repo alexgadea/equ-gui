@@ -19,7 +19,7 @@ import GUI.Settings
 import Graphics.UI.Gtk hiding (eventButton, eventSent,get)
 import qualified Graphics.UI.Gtk as G
 import Graphics.UI.Gtk.Gdk.EventM
-import Graphics.UI.Gtk.Glade (GladeXML,xmlGetWidget)
+import Graphics.UI.Gtk.Builder -- (GladeXML,xmlGetWidget)
 import Data.Reference
 import Data.Text(unpack)
 import Data.List (deleteBy)
@@ -57,8 +57,8 @@ quitAction :: Window -> IO ()
 quitAction w = widgetDestroy w
 
 -- | Obtener un elemento del menú.
-getMenuButton :: GladeXML -> String -> IO MenuItem
-getMenuButton w = xmlGetWidget w castToMenuItem 
+getMenuButton :: Builder -> String -> IO MenuItem
+getMenuButton w = builderGetObject w castToMenuItem 
 
 {- Las siguientes acciones muestran y ocultan la lista de símbolos. -}
 openSymFrame :: IState ()

@@ -4,7 +4,7 @@ module GUI.TypeTree (buildTreeExpr) where
 
 import Equ.PreExpr
 import Equ.Parser
-import Equ.TypeChecker (checkPreExpr)
+import Equ.TypeChecker (checkPreExpr,getType)
 import Equ.Types
 
 import GUI.Utils
@@ -264,5 +264,8 @@ checkInType s = case parseTyFromString s of
                      Right t -> return $ Just t
 
 chkPreExp :: Focus -> IO Type
-chkPreExp = either (const $ return TyUnknown) return . checkPreExpr . fst
+chkPreExp = return . getTypeFocus
 
+
+getTypeFocus :: Focus -> Type
+getTypeFocus = maybe TyUnknown id . getType . fst

@@ -62,11 +62,11 @@ import GUI.Types
 import GUI.Utils
 import GUI.Settings
 
-import Equ.PreExpr (Focus,PreExpr,PreExpr'(BinOp),Path,toExpr,isPreExprHole,toFocus,resetTypeAllAtoms)
+import Equ.PreExpr (Focus,PreExpr,PreExpr'(BinOp),Path,toExpr,isPreExprHole,toFocus)
 import Equ.TypeChecker(checkPreExpr)
 import Equ.Expr
 import Equ.Syntax
-import Equ.Theories (getExprProof,relToOp)
+import Equ.Theories (relToOp)
 
 import Equ.Exercise(Exercise)
 import Equ.Exercise.Conf(TypeCheck(Manual))
@@ -393,3 +393,4 @@ typeCheckConfigExpr exerFlag f@(e,path) =
     where
         reset :: PreExpr -> PreExpr
         reset = toExpr . resetTypeAllAtoms . toFocus
+        resetTypeAllAtoms = undefined

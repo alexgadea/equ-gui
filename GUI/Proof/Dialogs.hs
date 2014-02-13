@@ -8,7 +8,7 @@ import GUI.Proof
 import GUI.Widget
 import Equ.Proof
 import Equ.Proof.ListedProof
-import Equ.Parser.Proof
+import Equ.Parser.Proof hiding (getProofState)
 import Graphics.UI.Gtk hiding (eventButton, eventSent,get)
 
 import Data.Maybe(isJust)
@@ -37,7 +37,7 @@ dialogLoadProof ref centralBox truthBox expr_w = do
                                         (case takeExtension filepath of 
                                           ".prf" -> loadTextualPrf filepath
                                           ".equ" -> loadBinaryPrf filepath)
-                                        (\prf -> evalStateT (createNewProof (Just prf) centralBox truthBox expr_w) ref >>
+                                        (\(prf:_) -> evalStateT (createNewProof (Just prf) centralBox truthBox expr_w) ref >>
                                          widgetDestroy dialog))
          _ -> io $ widgetDestroy dialog
 

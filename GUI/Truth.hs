@@ -10,6 +10,7 @@ import GUI.Widget
 import Equ.PreExpr
 import Equ.TypeChecker
 import Equ.Theories
+import Equ.Proof (getExprProof)
 
 import qualified Graphics.UI.Gtk as G
 import Graphics.UI.Gtk hiding (eventButton, eventSent,get)

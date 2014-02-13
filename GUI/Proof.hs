@@ -27,13 +27,13 @@ import GUI.Expr ( writeExprWidget, writeInitExprWidget
                     , setupOptionExprWidget 
                     )
 import GUI.State.SymbolList(eventsSymbolList)
-import Equ.Parser
+import Equ.Parser hiding (getExprState,getProofState,proof)
 import Equ.Types
 
 import Graphics.UI.Gtk hiding (eventButton, eventSent,get)
 import qualified Graphics.UI.Gtk as G
 import Graphics.UI.Gtk.Gdk.EventM
-import Graphics.UI.Gtk.Glade (GladeXML,xmlGetWidget)
+--import Graphics.UI.Gtk.Glade (GladeXML,xmlGetWidget)
 import Graphics.UI.Gtk.Display.Image
 
 import Data.Maybe(fromJust)
