@@ -1,0 +1,4 @@
+[submodule "equ"]
+	path = equ
+	url = git://github.com/alexgadea/equ.git
+
