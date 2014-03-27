@@ -8,12 +8,12 @@ License-file:        LICENSE
 Author:              Renato Cherini, Alejandro Gadea, Emmanuel Gunther, Miguel Pagano
 Maintainer:          Miguel Pagano <pagano@famaf.unc.edu.ar>
 Build-Type:          Simple
-Cabal-Version:       >=1.2
-Tested-with:         GHC==6.10.1
+Cabal-Version:       >=1.6
+Tested-with:         GHC==7.4
 Build-type:          Simple
 Bug-reports:         https://github.com/miguelpagano/equ/issues
 
-Source-repository this
+Source-repository head
     Type:     git
     Location: https://github.com/alexgadea/equ-gui
     Branch:   master
