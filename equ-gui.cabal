@@ -1,9 +1,9 @@
 Name:                equ-gui
 Category:            Graphics
 Version:             0.2
-Synopsis:            A graphical proof checker for propositional calculus.
+Synopsis:            A graphical proof checker for equational proofs.
 Description:         GUI for equ.
-License:             GPL
+License:             GPL-3
 License-file:        LICENSE
 Author:              Renato Cherini, Alejandro Gadea, Emmanuel Gunther, Miguel Pagano
 Maintainer:          Miguel Pagano <pagano@famaf.unc.edu.ar>
@@ -12,6 +12,8 @@ Cabal-Version:       >=1.6
 Tested-with:         GHC==7.4
 Build-type:          Simple
 Bug-reports:         https://github.com/miguelpagano/equ/issues
+data-dir: data
+data-files: equ.ui
 
 Source-repository head
     Type:     git
@@ -22,6 +24,7 @@ Executable equ-gui
     buildable: True
     HS-Source-Dirs: .
     Main-is: GUI/Gui.hs
+    Other-modules: Paths_equ_gui
     GHC-options: -O3 -Odph -Wall
     Build-depends:       base, containers >= 0.4, mtl >= 2.0, reference >= 0.1, 
                          text >= 0.11.1.5, gtk >= 0.12.1, 

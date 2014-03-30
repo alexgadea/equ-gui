@@ -38,12 +38,14 @@ import qualified Data.Foldable as F (forM_)
 
 import Data.Map (fromList)
 
+import Paths_equ_gui
 
 main :: IO ()
 main = do 
     initGUI
     xml <- builderNew
-    builderAddFromFile xml "GUI/equ.ui"
+    fn <- getDataFileName "equ.ui"
+    builderAddFromFile xml fn
 
     -- get widgets
     window        <- builderGetObject xml castToWindow "mainWindow"
